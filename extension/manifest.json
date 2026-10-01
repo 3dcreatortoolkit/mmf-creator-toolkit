@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "3D Creator Toolkit: MMF CSV Exporter",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Export a creator's MyMiniFactory store listings and collections to CSV using your signed-in browser session.",
   "icons": {
     "16": "icons/icon16.png",
