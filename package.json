@@ -9,7 +9,7 @@
     "test": "node --test"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.2",
     "fake-indexeddb": "^6.2.5",
     "linkedom": "^0.18.0",
     "sharp": "^0.35.4"
