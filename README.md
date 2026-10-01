@@ -1,100 +1,69 @@
-# 3D Creator Toolkit — MyMiniFactory exporter
+# 3D Creator Toolkit
 
-Export your **own public MyMiniFactory object listings** to CSV, then optionally download their images and model files into a folder you choose. The extension uses your signed-in browser session; you do not need to enter a password into the extension.
+Export **your own public MyMiniFactory object listings** to a CSV. Optionally download their images and model files into a folder you choose. The extension uses your existing MyMiniFactory sign-in; it never asks you for a password.
 
-## Install
+## Install in Brave or Chrome
 
-You need desktop **Brave or Chrome**. From this GitHub repository's **Releases → Latest** page, download the asset named **`3d-creator-toolkit.zip`**. Releases are built automatically after successful pushes to the default branch. **No Node.js, command line, or build step is needed to install the extension.**
+1. **[Download the latest extension ZIP](https://github.com/3dcreatortoolkit/mmf-creator-toolkit/releases/latest/download/3d-creator-toolkit.zip)** and extract it to a folder you will keep. You do **not** need Node.js or a build step.
+2. Open `brave://extensions` or `chrome://extensions` and enable **Developer mode**.
+3. Click **Load unpacked** and select the **extracted folder containing `manifest.json`**—not the ZIP. You should see the cube icon for 3D Creator Toolkit.
+4. Sign in to [MyMiniFactory](https://www.myminifactory.com/) as the creator whose listings you want to export. Leave a MyMiniFactory tab open.
 
-1. Download the ZIP above and **extract it** to a folder you intend to keep. Do not choose the ZIP itself in the browser.
-2. Open `brave://extensions` (or `chrome://extensions`) and enable **Developer mode**.
-3. Click **Load unpacked** and select the **extracted folder that contains `manifest.json`**. The 3D Creator Toolkit cube icon should appear in your extensions list.
-4. Pin the extension to your browser toolbar if you want one-click access. Sign in to [MyMiniFactory](https://www.myminifactory.com/) as the creator whose listings you want, and leave a MyMiniFactory tab open.
+You can pin the extension to your toolbar for easier access.
 
-Keep the extracted folder in place: the browser loads the extension from there. **To update without losing the browser's saved download job**, pause or close the downloader, extract the new ZIP **over the same installed folder** (replace its files), then click **Reload** on the existing extension card. Do not remove the extension and load a different folder: unpacked extension storage is tied to its browser extension ID, which may change with the folder path. Refresh your MyMiniFactory tab if the updated extension cannot connect to it. If your browser warns about installing an unpacked extension, verify that you obtained the ZIP from a source you trust before continuing.
+## 1. Export your listings to CSV
 
-### Brave: enable folder access for asset downloads
+1. Click the extension icon. **Collect CSV** is selected by default; confirm it shows **your username and avatar**. The account is detected automatically and cannot be edited in the popup.
+2. If you only want a listing spreadsheet, leave **Include file download URLs** unchecked. **Check it before exporting if you also want to download model files** in step 2.
+3. Click **Export CSV**. Keep your MyMiniFactory tab open until the CSV appears in your browser's Downloads. You can reopen the popup to check progress.
 
-The **Collect CSV** tab works without any browser flag. The **Download assets** workspace needs permission to write inside the destination folder you choose, organize files by listing, and resume after an interruption. The browser's **File System Access API** provides that folder picker and permission; selecting a CSV alone does not grant folder access.
+![Collect CSV tab showing the signed-in creator, optional file links, and export button](docs/screenshots/collect-csv.png)
 
-Brave disables this API by default. To enable the folder picker:
+The CSV includes public object titles, prices, descriptions, tags, categories, collections, and image URLs. It does **not** include private objects or bundles. With the checkbox selected, it also includes file names, download URLs, and sizes when MyMiniFactory provides them. Keep a CSV with download links private: those links can expire.
+
+## 2. Download images and files (optional)
+
+### Brave users: enable the folder picker first
+
+**CSV export works without this setting.** Downloading assets into a folder you choose needs the browser's **File System Access API**. It lets the workspace create a folder for each listing, save files there, and access the same folder again when you resume. Selecting a CSV alone does not grant that access.
+
+Brave disables the API by default:
 
 1. Open `brave://flags/#file-system-access-api`.
-2. Set **File System Access API** to **Enabled** and **Relaunch** Brave.
-3. Reopen the downloader workspace. If you still see the compatibility notice, reload the extension at `brave://extensions` and reopen the workspace.
+2. Set **File System Access API** to **Enabled** and click **Relaunch**.
+3. Reopen the downloader workspace. The browser will still ask you to choose and grant access to a folder.
 
-This is a **browser-wide experimental flag**, not an extension setting. Enable it only if you trust applications to which you explicitly grant folder access. The extension cannot enable the flag for you. Chrome generally provides the picker without this flag. Your browser still asks you to choose a folder and may ask for permission again after a restart.
+This is a browser-wide experimental setting. Enable it only if you are comfortable granting folder access to applications you trust. Chrome generally provides the picker without changing a flag.
 
-## Step 1 — Collect your CSV
+### Start the download
 
-1. Sign in to [MyMiniFactory](https://www.myminifactory.com/) **as the creator whose listings you want**. Keep any MyMiniFactory tab open.
-2. Open the extension popup. **Collect CSV** is selected by default and shows the signed-in creator's username and avatar. The username is read-only: viewing another creator's profile does not change the export target.
-3. For a catalog-only CSV, leave **Include file download URLs** unchecked. To download model files in Step 2, **check it before exporting**; the CSV will include filenames, file sizes when available, and download links.
-4. Click **Export CSV**. Leave the MyMiniFactory tab open until the CSV downloads. You can close and reopen the popup to check progress; the export runs in the site tab.
+1. In the popup, select **Download assets** and click **Open downloader workspace**.
 
-The CSV contains one row per **public, listed object**, with its title, URL, price, description, tags, categories, collections, and image URLs. It does **not** include bundles or private objects. If the session changes or the listing data is incomplete, the export stops rather than saving a partial CSV.
+   ![Download assets tab with separate progress for images and files](docs/screenshots/download-assets-tab.png)
 
-**Screenshot reference — Collect CSV tab:** `docs/screenshots/collect-csv.png` (add your screenshot later).
+2. **Choose the CSV you exported with file download URLs included**, then click **Choose folder** and select the destination. Keep a signed-in MyMiniFactory tab open.
+3. Click **Start new download**. The workspace downloads images and files concurrently and shows separate progress, speed, and approximate remaining-time estimates.
 
-<!-- After adding the image, remove this comment wrapper to display it:
-![Collect CSV tab with the signed-in creator and export progress](docs/screenshots/collect-csv.png)
--->
+   ![Downloader workspace with CSV selection, folder picker, and download progress](docs/screenshots/downloader-workspace.png)
 
-## Step 2 — Download images and files
-
-1. Use a CSV exported with **Include file download URLs** checked. A CSV without `files_json` cannot start an asset download.
-2. Switch to the popup's **Download assets** tab and click **Open downloader workspace**.
-3. Choose that CSV and a destination folder using **Choose folder**. Keep a signed-in MyMiniFactory tab open.
-4. Click **Start new download**. One worker downloads images and another downloads files concurrently. Each has a separate progress bar, transferred-byte summary, current speed, and approximate time remaining; completed-file checkpoints are written one at a time.
-
-The downloader workspace follows your browser/OS **light or dark appearance** automatically, including its controls and progress panels. Changing your system theme while it is open does not interrupt downloads.
-
-New jobs save assets under:
+Files are organized as follows:
 
 ```text
-<chosen folder>/
+Your chosen folder/
   3d-creator-toolkit-progress.json
   listings/
-    <listing title>/
+    Listing title/
       images/
       files/
 ```
 
-Listing titles and image names are made filesystem-safe. If two titles or image names collide, the extension adds a distinguishing suffix. The progress file records which assets finished so the job can resume; it does **not** store the signed download links.
+The extension makes folder and image names safe for your filesystem and distinguishes duplicates. The progress file records completed assets; it does **not** store signed download links. Remaining-time estimates are only estimates and may be unavailable until some data has transferred.
 
-The speed and remaining-time estimates are **approximate**. Some files may have unknown sizes, and image sizes are learned while downloading, so an ETA may be unavailable at first. Older CSVs without file sizes still work but may not show a file ETA.
+## Pause, resume, and update
 
-**Screenshot reference — Download assets popup tab:** `docs/screenshots/download-assets-tab.png` (add your screenshot later).
+- To stop temporarily, click **Pause**. If you close the workspace or browser, reopen **Download assets → Open downloader workspace** and click **Resume saved download**. The browser may ask for folder permission again. Completed files are checked before being skipped.
+- A temporary network error is retried automatically. If MyMiniFactory responds with **429**, the downloader waits five seconds and tries again; you can still click Pause. If a download pauses for another reason, its error remains visible when you reopen the workspace.
+- If a file link expires, sign in as the **same creator**, export a fresh CSV with file links, and start again in the same folder to reuse finished assets. Switching creators hides the previous creator's saved job until you sign back in.
+- **To update the extension without losing its saved job:** pause the downloader, extract the new ZIP **over the same installed extension folder**, replace its files, and click **Reload** on the existing extension card in `brave://extensions` or `chrome://extensions`. Do not remove it and load a different folder; that can change the extension ID and separate it from browser-stored progress. Refresh your MyMiniFactory tab if the updated extension cannot connect.
 
-<!-- After adding the image, remove this comment wrapper to display it:
-![Download assets tab with separate image and file progress](docs/screenshots/download-assets-tab.png)
--->
-
-**Screenshot reference — Downloader workspace:** `docs/screenshots/downloader-workspace.png` (add your screenshot later).
-
-<!-- After adding the image, remove this comment wrapper to display it:
-![Downloader workspace with CSV, folder picker, and both progress bars](docs/screenshots/downloader-workspace.png)
--->
-
-### Pause and resume
-
-- **Pause** stops the current transfers. Closing the workspace or the browser also interrupts the job; it does not keep downloading in the background. Reopen **Download assets → Open downloader workspace** and click **Resume saved download**. The workspace checks completed files before skipping them and may request folder permission again.
-- Temporary network or server transfer failures are retried automatically (up to four attempts with short delays). After a MyMiniFactory **429 rate limit**, the downloader waits **five seconds** before trying again. Both workers share that pause; repeated 429s keep retrying every five seconds until MyMiniFactory allows the request or you click **Pause**. If the job eventually pauses for another reason, the downloader keeps the **original failing asset and reason** in its saved job and shows it when you reopen the workspace. If the notice says a file link expired or was denied, collect a fresh CSV with file links before starting again.
-- Choosing a **different destination folder** clears the visible progress in the downloader and popup to 0 / 0 for a new job. Select a CSV and click **Start new download**. The old job remains saved under the creator account; reopening the workspace restores it until replaced by the new job. Choosing the **same saved folder** retains its progress.
-- Jobs and popup progress are scoped to the signed-in creator. Signing out or changing creators pauses the job and hides the previous creator's CSV, folder, and progress. Sign back in as that creator to resume.
-- File download URLs may expire. If a pending link no longer works, collect a fresh CSV **while signed in as the same creator**, choose the same folder, and start again. Matching asset paths let the downloader reuse finished files.
-- If you are upgrading from an older version, a resumed job keeps its existing folder and image names. For the current title-based folders and CDN image filenames, start a **new job in an empty folder**. The extension does not rename files you previously downloaded.
-
-## Screenshot setup
-
-When you have screenshots, save them in the prepared `docs/screenshots/` directory with these names:
-
-| UI | Image path |
-| --- | --- |
-| Collect CSV popup tab | `docs/screenshots/collect-csv.png` |
-| Download assets popup tab | `docs/screenshots/download-assets-tab.png` |
-| Downloader workspace | `docs/screenshots/downloader-workspace.png` |
-
-Each section above contains the matching Markdown image reference in an HTML comment. Remove those comment wrappers after adding the PNGs to show the images without broken links in the meantime. Before sharing screenshots, hide usernames, browser account details, private folder paths, and any file URLs with signed query strings as appropriate.
-
-Maintaining or packaging the extension? See the separate [maintainer guide](docs/development.md). You do not need it to install or use the ZIP.
+Building or releasing the extension? See the separate [maintainer guide](docs/development.md).
