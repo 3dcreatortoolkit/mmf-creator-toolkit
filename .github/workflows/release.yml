@@ -1,0 +1,83 @@
+name: Test and release extension
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source and tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Assign unique patch version
+        id: version
+        run: node scripts/prepare-release.js
+
+      - name: Build distributable ZIP
+        shell: pwsh
+        run: |
+          ./scripts/package.ps1
+          Copy-Item "releases/3d-creator-toolkit-${{ steps.version.outputs.version }}.zip" 'releases/3d-creator-toolkit.zip'
+
+      - name: Verify ZIP manifest at root
+        shell: pwsh
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [System.IO.Compression.ZipFile]::OpenRead('releases/3d-creator-toolkit.zip')
+          try {
+            $entry = $zip.GetEntry('manifest.json')
+            if (-not $entry) { throw 'Release ZIP must contain manifest.json at its root.' }
+            $reader = [System.IO.StreamReader]::new($entry.Open())
+            try { $manifest = $reader.ReadToEnd() | ConvertFrom-Json }
+            finally { $reader.Dispose() }
+            if ($manifest.version -ne $env:RELEASE_VERSION) { throw 'Release ZIP version does not match its tag.' }
+          }
+          finally { $zip.Dispose() }
+
+      - name: Tag the versioned release source
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if (git tag --list $env:RELEASE_TAG) { throw "Tag $env:RELEASE_TAG already exists." }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add extension/manifest.json package.json package-lock.json
+          $changes = git diff --cached --name-only
+          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect release metadata changes.' }
+          if ($changes) { git commit -m "chore(release): $env:RELEASE_TAG" }
+          git tag -a $env:RELEASE_TAG -m "3D Creator Toolkit $env:RELEASE_TAG"
+          git push origin "refs/tags/$env:RELEASE_TAG"
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create $env:RELEASE_TAG 'releases/3d-creator-toolkit.zip' --verify-tag --generate-notes --title "3D Creator Toolkit v$env:RELEASE_VERSION"

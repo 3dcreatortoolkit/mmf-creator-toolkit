@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="popup.css">
+  <title>3D Creator Toolkit · MyMiniFactory export</title>
+</head>
+<body>
+  <main>
+    <header class="brand"><img class="brand-mark" src="icons/icon32.png" alt=""><span>3D Creator Toolkit</span><span class="brand-tag">CSV EXPORT</span></header>
+    <nav class="tabs" role="tablist" aria-label="Tool">
+      <button id="collect-tab" role="tab" type="button" aria-selected="true" aria-controls="collect-panel">Collect CSV</button>
+      <button id="download-tab" role="tab" type="button" aria-selected="false" aria-controls="download-panel">Download assets</button>
+    </nav>
+    <div id="collect-panel" role="tabpanel" aria-labelledby="collect-tab">
+    <section class="intro">
+      <h1>Bring your catalog over.</h1>
+      <p class="lead">Images, descriptions, tags and collections in one CSV.</p>
+      <div class="creator-identity">
+        <div class="creator-avatar-frame">
+          <img id="creator-avatar" class="creator-avatar" alt="" hidden>
+          <span id="creator-avatar-fallback" class="creator-avatar-fallback" aria-hidden="true">?</span>
+        </div>
+        <label class="creator-input-wrap" for="creator-input">
+          <span>Signed-in creator</span>
+          <input id="creator-input" type="text" placeholder="Checking your account…" readonly aria-readonly="true">
+        </label>
+      </div>
+    </section>
+    <section class="card" aria-label="Export progress">
+      <div class="progress-heading"><span>EXPORT PROGRESS</span><strong id="percent">0%</strong></div>
+      <div class="progress-track" id="progress-track" role="progressbar" aria-label="Export progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+      <ol class="steps" id="steps"></ol>
+      <div class="activity" id="activity" role="status" aria-live="polite">Checking your session…</div>
+    </section>
+    <div class="alert" id="alert" role="alert" hidden></div>
+    <a id="sign-in" class="sign-in" href="https://www.myminifactory.com/login" target="_blank" rel="noopener noreferrer" hidden>Sign in to MyMiniFactory ↗</a>
+    <label class="file-option" for="include-files">
+      <input id="include-files" type="checkbox">
+      <span><strong>Include file download URLs</strong><small>Adds filenames and links in a <code>files_json</code> column. Off by default.</small></span>
+    </label>
+    <button id="start" type="button" disabled><span id="button-label">Export CSV</span><span aria-hidden="true">↗</span></button>
+    <button id="check-again" class="secondary-button" type="button" hidden>Check sign-in again</button>
+    </div>
+    <div id="download-panel" role="tabpanel" aria-labelledby="download-tab" hidden>
+      <section class="download-intro">
+        <p class="eyebrow">STEP 2 · DOWNLOAD ASSETS</p>
+        <h1>Bring the files home.</h1>
+        <p class="lead">Use a CSV exported with <strong>Include file download URLs</strong> selected. Choose your CSV and a folder in the downloader workspace.</p>
+        <div id="download-summary" class="download-summary" role="status">No download job started yet.</div>
+        <div id="download-phase-progress" class="download-phase-progress" hidden>
+          <div class="mini-heading"><span>Listing images</span><strong id="popup-images-count">0 / 0</strong></div>
+          <div id="popup-images-track" class="mini-track" role="progressbar" aria-label="Listing images downloaded" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="popup-images-fill" class="mini-fill"></div></div>
+          <div class="mini-heading"><span>Listing files</span><strong id="popup-files-count">0 / 0</strong></div>
+          <div id="popup-files-track" class="mini-track" role="progressbar" aria-label="Listing files downloaded" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="popup-files-fill" class="mini-fill"></div></div>
+        </div>
+        <button id="open-downloader" type="button">Open downloader workspace <span aria-hidden="true">↗</span></button>
+        <p class="download-note">The workspace saves a progress file inside your chosen folder. After a crash or closed tab, reopen it to resume.</p>
+      </section>
+    </div>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

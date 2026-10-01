@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="downloader.css">
+  <title>3D Creator Toolkit · Asset downloader</title>
+</head>
+<body>
+  <main>
+    <header class="brand"><img class="brand-mark" src="icons/icon32.png" alt=""><span>3D Creator Toolkit</span><span class="tag">MYMINIFACTORY ASSETS</span></header>
+    <div class="intro">
+      <p class="eyebrow">STEP 2 · LOCAL DOWNLOAD</p>
+      <h1>Give every listing its own place.</h1>
+      <p>Choose a CSV exported with file links, then pick any folder. Images and files are grouped by listing. Progress is saved in that folder and in this browser.</p>
+    </div>
+    <div class="grid">
+      <section class="card" aria-labelledby="csv-title">
+        <span class="number">01</span><h2 id="csv-title">Choose the CSV</h2>
+        <p>It must contain <code>image_urls_json</code> and <code>files_json</code>.</p>
+        <input id="csv" type="file" accept=".csv,text/csv" aria-label="Choose a completed export CSV">
+        <p id="csv-info" class="info">No CSV selected yet.</p>
+      </section>
+      <section class="card" aria-labelledby="folder-title">
+        <span class="number">02</span><h2 id="folder-title">Choose a folder</h2>
+        <p>Chrome may ask to restore folder access after a browser restart.</p>
+        <button id="choose-folder" type="button" class="secondary">Choose folder…</button>
+        <p id="folder-info" class="info">No folder selected yet.</p>
+        <div id="picker-help" class="picker-help" hidden>
+          <p id="brave-help" hidden>Brave keeps folder access off by default. Open <code>brave://flags/#file-system-access-api</code>, set <strong>File System Access API</strong> to <strong>Enabled</strong>, relaunch Brave, then reopen this workspace.</p>
+          <p id="other-browser-help" hidden>This browser does not offer a directory picker. Open this extension in Chrome or a Chromium browser with the File System Access API enabled to choose any folder.</p>
+        </div>
+      </section>
+    </div>
+    <section class="card progress-card" aria-labelledby="progress-title">
+      <div class="progress-header"><div><span class="number">03</span><h2 id="progress-title">Download &amp; resume</h2></div><strong id="progress-count">0 / 0</strong></div>
+      <div class="phase-bars">
+        <div id="images-phase" class="phase" data-active="false">
+          <div class="phase-heading"><span>Listing images</span><strong id="images-count">0 / 0</strong></div>
+          <div id="images-track" class="progress-track" role="progressbar" aria-label="Listing images downloaded" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="images-fill" class="progress-fill"></div></div>
+          <p id="images-stats" class="phase-stats">Transferred 0 B · Speed — · ETA —</p>
+          <p id="images-current" class="phase-current">Waiting for images…</p>
+        </div>
+        <div id="files-phase" class="phase" data-active="false">
+          <div class="phase-heading"><span>Listing files</span><strong id="files-count">0 / 0</strong></div>
+          <div id="files-track" class="progress-track" role="progressbar" aria-label="Listing files downloaded" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="files-fill" class="progress-fill"></div></div>
+          <p id="files-stats" class="phase-stats">0 B of 0 B expected · Speed — · ETA —</p>
+          <p id="files-current" class="phase-current">Waiting for files…</p>
+        </div>
+      </div>
+      <p id="overall-eta" class="overall-eta">Approximate time remaining: waiting for transfer data…</p>
+      <p id="current" class="current" role="status" aria-live="polite">Select a CSV and folder to begin.</p>
+      <div class="actions">
+        <button id="start" type="button" disabled>Start new download</button>
+        <button id="resume" type="button" class="secondary" hidden>Resume saved download</button>
+        <button id="pause" type="button" class="secondary" hidden>Pause</button>
+      </div>
+      <p id="notice" class="notice" role="alert" hidden></p>
+      <p class="footnote">Keep any signed-in MyMiniFactory tab open while downloading. Closing this tab or the browser pauses work; reopen the downloader and resume.</p>
+    </section>
+  </main>
+  <script src="downloader.js"></script>
+</body>
+</html>
