@@ -1,6 +1,9 @@
-# 3D Creator Toolkit
+# MMF Creator Toolkit
 
 Export **your own public MyMiniFactory object listings** to a CSV. Optionally download their images and model files into a folder you choose. The extension uses your existing MyMiniFactory sign-in; it never asks you for a password.
+
+> [!CAUTION]
+> **YOUR FILES STAY ON YOUR COMPUTER.** This extension does not upload your existing 3D files, selected CSV, or downloaded assets to its own servers or to third parties. It requests listing information and selected downloads **from MyMiniFactory**, then processes the CSV and saves downloads locally in your browser and the folder you choose. Keep CSVs with signed download links private.
 
 ## Install in Brave or Chrome
 
@@ -67,3 +70,7 @@ The extension makes folder and image names safe for your filesystem and distingu
 - **To update the extension without losing its saved job:** pause the downloader, extract the new ZIP **over the same installed extension folder**, replace its files, and click **Reload** on the existing extension card in `brave://extensions` or `chrome://extensions`. Do not remove it and load a different folder; that can change the extension ID and separate it from browser-stored progress. Refresh your MyMiniFactory tab if the updated extension cannot connect.
 
 Building or releasing the extension? See the separate [maintainer guide](docs/development.md).
+
+## Thanks
+
+Special thanks to **Silent Ronin Studios** for being an early adopter and helping test this extension.
